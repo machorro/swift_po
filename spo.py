@@ -31,7 +31,10 @@ def _swift_po(debugger, expression, ctx, result, _):
     # Next try `frame variable` using GetValueForVariablePath()
     value = frame.GetValueForVariablePath(expression)
     if value.error.success:
-        description = value.description.rstrip()
+        try:
+            description = value.description.rstrip()
+        except AttributeError:
+            description = value.description
         if description and not description.startswith(DescriptionErrors):
             print(description, file=result)
             return
